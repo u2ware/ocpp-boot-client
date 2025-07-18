@@ -1,28 +1,35 @@
 # ocpp-boot-client
 OCPP client implementation with spring-boot
 
-## Requriement (preparing)
+## Requriement
 
-ocpp-boot 
+```xml
+<dependency>
+	<groupId>io.u2ware</groupId>
+	<artifactId>ocpp-boot</artifactId>
+	<version>0.9.9</version>
+</dependency>
+```
+   
+> [ocpp-boot](https://github.com/u2ware/ocpp-boot?tab=readme-ov-file#install) 
+    
 
-
-
-## Usage (preparing)
+## Usage
 
 ```bash
 ./mvnw springboot:run
 ```
 
-Admin UI
-http://localhost:8082
+> http://localhost:8082
 
-# @EnableOcppClient (preparing)
+
+# @EnableOcppClient 
 
 ```java
 @SpringBootApplication
 @EnableOcppClient(                      //-> (1) 
     version = OCPPVersion.V1_6,         //-> (2) 
-	uri = "ws://localhost:8081/myocpp" //-> (3) 
+	uri = "ws://localhost:8081/myocpp"  //-> (3) 
 )
 public class Application {
 	public static void main(String[] args) {
