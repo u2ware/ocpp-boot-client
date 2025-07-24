@@ -15,12 +15,12 @@ import io.u2ware.ocpp.v1_6.messaging.SpecificationSendingOperations;
 import io.u2ware.ocpp.v1_6.model.*;
 import io.u2ware.ocpp.v1_6.usecase.StartTransaction.ClientHandler;
 
-@Component
-public class StartTransaction implements ClientHandler {
+@Component // 1
+public class StartTransaction implements ClientHandler { // 2
     
     protected Log logger = LogFactory.getLog(getClass());
     
-    protected @Autowired SpecificationSendingOperations ocppOperations;
+    protected @Autowired(required = false) SpecificationSendingOperations ocppOperations;
 
     @Override
     public StartTransactionRequest sendStartTransactionRequest(String id, Map<String, Object> req) {
@@ -30,10 +30,10 @@ public class StartTransaction implements ClientHandler {
 
     @Override
     public void receivedStartTransactionResponse(String id, StartTransactionResponse res, ErrorCode err) {
-        logger.info(comment(this, Comment.receivedStartTransactionResponse, id));
+        logger.info(comment(this, Comment.receivedStartTransactionResponse, id), err);
 
         if(! ObjectUtils.isEmpty(res)) {
-            SpecificationAction action = Specification.InitiatedByChargePoint.DataTransfer.message(); 
+            SpecificationAction action = Specification.InitiatedByChargePoint.DataTransfer.message(); // 3
             ocppOperations.convertAndSend(id, action);
         }
     }

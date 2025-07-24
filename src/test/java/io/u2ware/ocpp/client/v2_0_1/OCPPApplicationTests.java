@@ -1,4 +1,4 @@
-package io.u2ware.ocpp.client;
+package io.u2ware.ocpp.client.v2_0_1;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -8,42 +8,45 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
 import io.u2ware.ocpp.config.WebSocketHandlerInvoker;
-import io.u2ware.ocpp.v1_6.messaging.CentralSystem;
-import io.u2ware.ocpp.v1_6.messaging.ChargePoint;
-import io.u2ware.ocpp.v1_6.messaging.Specification;
-import io.u2ware.ocpp.v1_6.messaging.SpecificationSendingTemplate;
+import io.u2ware.ocpp.v2_0_1.messaging.CSMS;
+import io.u2ware.ocpp.v2_0_1.messaging.Specification;
+import io.u2ware.ocpp.v2_0_1.messaging.SpecificationSendingTemplate;
+import io.u2ware.ocpp.v2_0_1.messaging.ChargingStation;
 
-// import static io.u2ware.common.docs.MockMvcRestDocs.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ApplicationTests {
+class OCPPApplicationTests {
 
 	protected Log logger = LogFactory.getLog(getClass());
 
   	protected @Autowired ApplicationContext ac;
 
-	protected @Autowired ChargePoint client;
+	protected @Autowired ChargingStation client;
 	protected @Autowired SpecificationSendingTemplate clientTemplate;
 
 
 	@Test
 	void context1Loads() throws Exception {
 
-		CentralSystem server = new CentralSystem();
+		logger.info("Mock Server...");			
+		CSMS server = new CSMS();
 		server.registerDefaultUsecases();
 		SpecificationSendingTemplate serverTemplate = new SpecificationSendingTemplate(server);
 
-		logger.info("===================");			
+
+		logger.info("WebSocketHandlerInvoker... (without I/O)");			
 		WebSocketHandlerInvoker.of(ac).connect(serverTemplate, clientTemplate);
 		Thread.sleep(2000);
 
-		logger.info("2===================");			
+
+		logger.info("Messaging Initiated By ChargingStation...");			
 		for(Specification s : Specification.usecases(client)) {
 			clientTemplate.convertAndSend(s.message());
 			Thread.sleep(500);
 		}	
 
-		logger.info("3===================");			
+
+		logger.info("Messaging Initiated By CSMS...");
 		for(Specification s : Specification.usecases(server)) {
 			serverTemplate.convertAndSend(s.message());
 			Thread.sleep(500);

@@ -1,0 +1,28 @@
+package io.u2ware.ocpp.client.v2_0_1;
+
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
+
+import io.u2ware.ocpp.v2_0_1.exception.*;
+import io.u2ware.ocpp.v2_0_1.model.*;
+import io.u2ware.ocpp.v2_0_1.usecase.A04.ClientHandler;
+
+@Component
+public class A04 implements ClientHandler{
+    
+    protected Log logger = LogFactory.getLog(getClass());
+
+    @Override
+    public SecurityEventNotificationRequest sendSecurityEventNotificationRequest(String id, Map<String,Object> req) {
+        logger.info(comment(this, Comment.sendSecurityEventNotificationRequest, id));
+        return new SecurityEventNotificationRequest();
+    }
+
+    @Override
+    public void receivedSecurityEventNotificationResponse(String id, SecurityEventNotificationResponse res, ErrorCode err) {
+        logger.info(comment(this, Comment.receivedSecurityEventNotificationResponse, id));
+    }
+}

@@ -15,7 +15,7 @@ public class ReserveNow implements ClientHandler {
 
     protected Log logger = LogFactory.getLog(getClass());
     
-    protected @Autowired SpecificationSendingOperations ocppOperations;
+    protected @Autowired(required = false) SpecificationSendingOperations ocppOperations;
 
     @Override
     public ReserveNowResponse receivedReserveNowRequest(String id, ReserveNowRequest req) {

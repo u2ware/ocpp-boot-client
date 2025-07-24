@@ -74,7 +74,7 @@ public class StartTransaction implements ClientHandler { // 2
 
     @Override
     public void receivedStartTransactionResponse(String id, StartTransactionResponse res, ErrorCode err) {
-        logger.info(comment(this, Comment.receivedStartTransactionResponse, id));
+        logger.info(comment(this, Comment.receivedStartTransactionResponse, id), err);
 
         if(! ObjectUtils.isEmpty(res)) {
             SpecificationAction action = Specification.InitiatedByChargePoint.DataTransfer.message();  // 3
@@ -99,13 +99,13 @@ public class RemoteStartTransaction implements ClientHandler { // 2
         if(ObjectUtils.isEmpty(req)) {
             throw ErrorCodes.GenericError.exception("your error message"); // 4
         }
-        return StartTransactionResponse.builder().build();
+        return RemoteStartTransactionResponse.builder().build();
     }
 
     @Override
     public void sendRemoteStartTransactionResponse(String id, RemoteStartTransactionResponse res,
             ErrorCode err) {
-        logger.info(comment(this, Comment.sendRemoteStartTransactionResponse, id));
+        logger.info(comment(this, Comment.sendRemoteStartTransactionResponse, id), err);
     }
 }
 ```

@@ -17,7 +17,7 @@ public class DataTransfer implements ClientHandler{
     
     protected Log logger = LogFactory.getLog(getClass());
     
-    protected @Autowired SpecificationSendingOperations ocppOperations;
+    protected @Autowired(required = false) SpecificationSendingOperations ocppOperations;
 
     @Override
     public DataTransferRequest sendDataTransferRequest(String id, Map<String, Object> req) {

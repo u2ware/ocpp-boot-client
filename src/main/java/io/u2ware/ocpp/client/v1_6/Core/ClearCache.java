@@ -15,7 +15,7 @@ public class ClearCache implements ClientHandler{
 
     protected Log logger = LogFactory.getLog(getClass());
     
-    protected @Autowired SpecificationSendingOperations ocppOperations;
+    protected @Autowired(required = false) SpecificationSendingOperations ocppOperations;
 
     @Override
     public ClearCacheResponse receivedClearCacheRequest(String id, ClearCacheRequest req) {
