@@ -56,7 +56,7 @@ public class Application {
 	|ocppInitializer | [ChargingStationInitializer]()| Scan for a [ChargingStationHandler]() that register it in [ChargingStation]().|
 
 
-# Customize Usecase   
+# Customize Handler   
 
 If you want to customize a Handler, implement the corresponding client handler.
 
