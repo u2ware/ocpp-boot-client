@@ -17,7 +17,7 @@ import io.u2ware.ocpp.v1_6.messaging.CentralSystemCommandTemplate;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class OCPPApplicationTests {
+class ApplicationTests {
 
 	protected Log logger = LogFactory.getLog(getClass());
 
@@ -32,5 +32,25 @@ class OCPPApplicationTests {
 
 		logger.info("(v1.6)ChargePoint               : "+client);
 		logger.info("(v1.6)ChargePointCommandTemplate: "+clientTemplate);
+
+		/////////////////////////////////////
+		// Create Mock Server
+		/////////////////////////////////////
+		CentralSystem server = new CentralSystem();
+		CentralSystemCommandTemplate serverTemplate = new CentralSystemCommandTemplate(server);
+        server.registerDefaultFeatures();
+
+		/////////////////////////////////////
+		// OCPP Client Test  without I/O
+		/////////////////////////////////////
+		WebSocketHandlerInvoker.of(ac).connect(serverTemplate, clientTemplate);
+		Thread.sleep(1000);	
+
+
+		/////////////////////////////////////
+		// 
+		/////////////////////////////////////
+		clientTemplate.send(ChargePointCommand.Core.Heartbeat.buildWith("MyCustomHandler"));
+		Thread.sleep(1000);		
 	}
 }

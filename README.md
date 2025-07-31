@@ -61,33 +61,51 @@ public class Application {
 If you want to customize a Handler, implement the corresponding client handler.
 
 ```java
-import io.u2ware.ocpp.v1_6.handlers.StartTransaction.ChargePointHandler; // 2.
+import io.u2ware.ocpp.v1_6.exception.ErrorCodes; // 3.
+import io.u2ware.ocpp.v1_6.handlers.DataTransfer.ChargePointHandler; // 2.
 
 @Component // 1.
-public class StartTransaction implements ChargePointHandler { // 2.
+public class DataTransfer implements ChargePointHandler { // 2.
 
-    @Override/** StartTransaction [1/4] */
-    public StartTransactionRequest sendStartTransactionRequest(
+    protected Log logger = LogFactory.getLog(getClass());
+
+    @Override/** DataTransfer [1/4] */
+    public DataTransferRequest sendDataTransferRequest(
         String id, Map<String, Object> req) {
-        return StartTransactionRequest.builder().build();
-    } 
+        return DataTransferRequest.builder().build();
+    }
 
-    @Override/** StartTransaction [3/4] */
-    public void receivedStartTransactionResponse(
-        String id, StartTransactionResponse res, ErrorCode err) {        
+    @Override/** DataTransfer [3/4] */
+    public void receivedDataTransferResponse(
+        String id, DataTransferResponse res, ErrorCode err) {
+    }
+
+    @Override/** DataTransfer [2/4] */
+    public DataTransferResponse receivedDataTransferRequest(
+        String id, DataTransferRequest req) {
+        if(ObjectUtils.isEmpty(req)) {
+            throw ErrorCodes.GenericError.exception("your error message"); // 3.
+        }
+        return DataTransferResponse.builder().build();
+    }
+
+    @Override/** DataTransfer [4/4] */
+    public void sendDataTransferResponse(
+        String id, DataTransferResponse res, ErrorCode err) {
     }
 }
 ```
 
 ```java
-import io.u2ware.ocpp.v1_6.exception.ErrorCodes; // 3.
-import io.u2ware.ocpp.v1_6.handlers.RemoteStartTransaction; // 2.
+import io.u2ware.ocpp.v1_6.handlers.Heartbeat; // 2.
+import io.u2ware.ocpp.v1_6.handlers.StartTransaction; // 2.
+import io.u2ware.ocpp.v1_6.messaging.ChargePointCommand;
 import io.u2ware.ocpp.v1_6.messaging.ChargePointCommandOperations; // 4.
 
 @Component // 1.
-public class MyCustomHandler implements 
-    RemoteStartTransaction.ChargePointHandler, // 2.
-    Heartbeat.ChargePointHandler {  // 2.
+public class MyCustomHandler implements      
+    Heartbeat.ChargePointHandler, // 2.
+    StartTransaction.ChargePointHandler {  // 2.
 
     protected @Autowired ChargePointCommandOperations operations;
 
@@ -105,25 +123,20 @@ public class MyCustomHandler implements
     @Override/** MyCustomHandler [3/8] */
     public void receivedHeartbeatResponse(
         String id, HeartbeatResponse res, ErrorCode err) {
-    }
-
-    @Override/** MyCustomHandler [6/8] */
-    public RemoteStartTransactionResponse receivedRemoteStartTransactionRequest(
-        String id, RemoteStartTransactionRequest req) {
-        if(ObjectUtils.isEmpty(req)) {
-            throw ErrorCodes.GenericError.exception("your error message"); // 3.
-        }            
-        return RemoteStartTransactionResponse.builder().build();        
-    }
-
-    @Override/** MyCustomHandler [8/8] */
-    public void sendRemoteStartTransactionResponse(
-        String id, RemoteStartTransactionResponse res, ErrorCode err) {
-
         ChargePointCommand command = 
-            ChargePointCommand.Core.StartTransaction.build();            
+            ChargePointCommand.Core.StartTransaction.buildWith("MyCustomHandler");
+        operations.send(command); // 4.            
+    }
 
-        operations.send(command); // 4.
+    @Override/** MyCustomHandler [5/8] */
+    public StartTransactionRequest sendStartTransactionRequest(
+        String id, Map<String, Object> req) {
+        return StartTransactionRequest.builder().build();
+    }
+
+    @Override/** MyCustomHandler [7/8] */
+    public void receivedStartTransactionResponse(
+        String id, StartTransactionResponse res, ErrorCode err) {
     }
 }
 ```
