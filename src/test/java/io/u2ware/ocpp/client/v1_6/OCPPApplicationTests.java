@@ -9,9 +9,11 @@ import org.springframework.context.ApplicationContext;
 
 import io.u2ware.ocpp.config.WebSocketHandlerInvoker;
 import io.u2ware.ocpp.v1_6.messaging.CentralSystem;
+import io.u2ware.ocpp.v1_6.messaging.CentralSystemCommand;
 import io.u2ware.ocpp.v1_6.messaging.ChargePoint;
-import io.u2ware.ocpp.v1_6.messaging.Specification;
-import io.u2ware.ocpp.v1_6.messaging.SpecificationSendingTemplate;
+import io.u2ware.ocpp.v1_6.messaging.ChargePointCommand;
+import io.u2ware.ocpp.v1_6.messaging.ChargePointCommandTemplate;
+import io.u2ware.ocpp.v1_6.messaging.CentralSystemCommandTemplate;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -22,34 +24,13 @@ class OCPPApplicationTests {
   	protected @Autowired ApplicationContext ac;
 
 	protected @Autowired ChargePoint client;
-	protected @Autowired SpecificationSendingTemplate clientTemplate;
+	protected @Autowired ChargePointCommandTemplate clientTemplate;
 
 
 	@Test
 	void context1Loads() throws Exception {
 
-		logger.info("Mock Server...");			
-		CentralSystem server = new CentralSystem();
-		server.registerDefaultUsecases();
-		SpecificationSendingTemplate serverTemplate = new SpecificationSendingTemplate(server);
-
-
-		logger.info("WebSocketHandlerInvoker... (without I/O)");			
-		WebSocketHandlerInvoker.of(ac).connect(serverTemplate, clientTemplate);
-		Thread.sleep(2000);
-
-
-		logger.info("Messaging Initiated By ChargePoint...");			
-		for(Specification s : Specification.usecases(client)) {
-			clientTemplate.convertAndSend(s.message());
-			Thread.sleep(500);
-		}	
-
-
-		logger.info("Messaging Initiated By CentralSystem...");			
-		for(Specification s : Specification.usecases(server)) {
-			serverTemplate.convertAndSend(s.message());
-			Thread.sleep(500);
-		}
+		logger.info("(v1.6)ChargePoint               : "+client);
+		logger.info("(v1.6)ChargePointCommandTemplate: "+clientTemplate);
 	}
 }

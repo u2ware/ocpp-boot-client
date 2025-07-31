@@ -54,7 +54,10 @@
             <groupId>io.u2ware</groupId>
             <artifactId>ocpp-boot</artifactId>
 			<version>0.9.9</version>
+		    <scope>system</scope>
+		    <systemPath>${project.basedir}/lib/ocpp-boot-0.9.9.jar</systemPath>
         </dependency>
+
 
 
 

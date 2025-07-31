@@ -9,8 +9,7 @@ import org.springframework.context.ApplicationContext;
 
 import io.u2ware.ocpp.config.WebSocketHandlerInvoker;
 import io.u2ware.ocpp.v2_0_1.messaging.CSMS;
-import io.u2ware.ocpp.v2_0_1.messaging.Specification;
-import io.u2ware.ocpp.v2_0_1.messaging.SpecificationSendingTemplate;
+import io.u2ware.ocpp.v2_0_1.messaging.ChargingStationCommandTemplate;
 import io.u2ware.ocpp.v2_0_1.messaging.ChargingStation;
 
 
@@ -22,34 +21,14 @@ class OCPPApplicationTests {
   	protected @Autowired ApplicationContext ac;
 
 	protected @Autowired ChargingStation client;
-	protected @Autowired SpecificationSendingTemplate clientTemplate;
+	protected @Autowired ChargingStationCommandTemplate clientTemplate;
 
 
 	@Test
 	void context1Loads() throws Exception {
 
-		logger.info("Mock Server...");			
-		CSMS server = new CSMS();
-		server.registerDefaultUsecases();
-		SpecificationSendingTemplate serverTemplate = new SpecificationSendingTemplate(server);
-
-
-		logger.info("WebSocketHandlerInvoker... (without I/O)");			
-		WebSocketHandlerInvoker.of(ac).connect(serverTemplate, clientTemplate);
-		Thread.sleep(2000);
-
-
-		logger.info("Messaging Initiated By ChargingStation...");			
-		for(Specification s : Specification.usecases(client)) {
-			clientTemplate.convertAndSend(s.message());
-			Thread.sleep(500);
-		}	
-
-
-		logger.info("Messaging Initiated By CSMS...");
-		for(Specification s : Specification.usecases(server)) {
-			serverTemplate.convertAndSend(s.message());
-			Thread.sleep(500);
-		}
+		logger.info("(v2.0.1)ChargingStation               : "+client);
+		logger.info("(v2.0.1)ChargingStationCommandTemplate: "+clientTemplate);
+		
 	}
 }
