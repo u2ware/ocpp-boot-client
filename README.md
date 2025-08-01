@@ -152,35 +152,38 @@ public class MyCustomHandler implements
 # Test without I/O
 
 ```java
-import io.u2ware.ocpp.client.MockWebSocketHandlerInvoker; //-> 2
-import io.u2ware.ocpp.v2_1.messaging.CSMSCommandTemplate; //-> 1
+import io.u2ware.ocpp.client.MockWebSocketHandlerInvoker; //-> 2.
+import io.u2ware.ocpp.v2_1.messaging.CSMSCommandTemplate; //-> 1.
 import io.u2ware.ocpp.v2_1.messaging.ChargingStationCommandTemplate; 
 
 
 @SpringBootTest
 class ApplicationTests {
 
-  	protected @Autowired ApplicationContext ac;
+    protected @Autowired ApplicationContext ac;
 
-	protected @Autowired ChargingStationCommandTemplate clientTemplate;
+    protected @Autowired ChargingStationCommandTemplate clientTemplate;
 
-	@Test
-	void context1Loads() throws Exception {
+    @Test
+    void context1Loads() throws Exception {
 
-		/////////////////////////////////////
-		// OCPP Client Test  without I/O
-		/////////////////////////////////////
-		CSMSCommandTemplate mockServerTemplate = new CSMSCommandTemplate();
-		MockWebSocketHandlerInvoker.of(ac).connect(clientTemplate, mockServerTemplate); //-> 2
-		Thread.sleep(1000);	
+        /////////////////////////////////////
+        // OCPP Client Test  without I/O
+        /////////////////////////////////////
+        CSMSCommandTemplate mockServerTemplate 
+            = new CSMSCommandTemplate(); //-> 1.
 
+        MockWebSocketHandlerInvoker.of(ac)
+            .connect(clientTemplate, mockServerTemplate); //-> 2.
 
-		/////////////////////////////////////
-		// 
-		/////////////////////////////////////
-		clientTemplate.send(ChargingStationCommand.ALL.Heartbeat.buildWith("MyCustomHandler"));
-		Thread.sleep(1000);			
-	}
+        Thread.sleep(1000);	
+
+        /////////////////////////////////////
+        // 
+        /////////////////////////////////////
+        clientTemplate.send(ChargingStationCommand.ALL.Heartbeat.buildWith("MyCustomHandler"));
+        Thread.sleep(1000);
+    }
 }
 
 ```
