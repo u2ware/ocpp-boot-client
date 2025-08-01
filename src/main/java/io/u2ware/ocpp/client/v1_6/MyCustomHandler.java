@@ -18,14 +18,14 @@ import io.u2ware.ocpp.v1_6.model.HeartbeatResponse;
 import io.u2ware.ocpp.v1_6.model.StartTransactionRequest;
 import io.u2ware.ocpp.v1_6.model.StartTransactionResponse;
 
-@Component // 1.
+@Component("MyCustomHandler_v1_6") // 1.
 public class MyCustomHandler implements      
     Heartbeat.ChargePointHandler, // 2.
     StartTransaction.ChargePointHandler {  // 2.
 
     protected Log logger = LogFactory.getLog(getClass());
 
-    protected @Autowired ChargePointCommandOperations operations;
+    protected @Autowired(required = false) ChargePointCommandOperations operations;
 
     @Override
     public String[] features() {

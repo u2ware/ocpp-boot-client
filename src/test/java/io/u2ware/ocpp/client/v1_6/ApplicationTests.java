@@ -7,16 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
-import io.u2ware.ocpp.config.WebSocketHandlerInvoker;
-import io.u2ware.ocpp.v1_6.messaging.CentralSystem;
-import io.u2ware.ocpp.v1_6.messaging.CentralSystemCommand;
+import io.u2ware.ocpp.client.MockWebSocketHandlerInvoker;
+import io.u2ware.ocpp.v1_6.messaging.CentralSystemCommandTemplate;
 import io.u2ware.ocpp.v1_6.messaging.ChargePoint;
 import io.u2ware.ocpp.v1_6.messaging.ChargePointCommand;
 import io.u2ware.ocpp.v1_6.messaging.ChargePointCommandTemplate;
-import io.u2ware.ocpp.v1_6.messaging.CentralSystemCommandTemplate;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 class ApplicationTests {
 
 	protected Log logger = LogFactory.getLog(getClass());
@@ -34,16 +32,10 @@ class ApplicationTests {
 		logger.info("(v1.6)ChargePointCommandTemplate: "+clientTemplate);
 
 		/////////////////////////////////////
-		// Create Mock Server
+		// OCPP Client Test without I/O
 		/////////////////////////////////////
-		CentralSystem server = new CentralSystem();
-		CentralSystemCommandTemplate serverTemplate = new CentralSystemCommandTemplate(server);
-        server.registerDefaultFeatures();
-
-		/////////////////////////////////////
-		// OCPP Client Test  without I/O
-		/////////////////////////////////////
-		WebSocketHandlerInvoker.of(ac).connect(serverTemplate, clientTemplate);
+		CentralSystemCommandTemplate mockServerTemplate = new CentralSystemCommandTemplate();
+		MockWebSocketHandlerInvoker.of(ac).connect(clientTemplate, mockServerTemplate);
 		Thread.sleep(1000);	
 
 
