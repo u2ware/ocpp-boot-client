@@ -181,7 +181,10 @@ class ApplicationTests {
         /////////////////////////////////////
         // 
         /////////////////////////////////////
-        clientTemplate.send(ChargingStationCommand.ALL.Heartbeat.buildWith("MyCustomHandler"));
+        CSMSCommand command 
+            = ChargingStationCommand.ALL.Heartbeat.buildWith("MyCustomHandler");
+        clientTemplate.send(command);
+        
         Thread.sleep(1000);
     }
 }
