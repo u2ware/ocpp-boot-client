@@ -46,7 +46,7 @@ public class MyCustomHandler implements
         ChargingStationCommand command = 
             ChargingStationCommand.ALL.TransactionEvent.buildWith("MyCustomHandler");
 
-        operations.send(command); //-> 4.            
+        operations.send(id, command); //-> 4.            
     }
 
     @Override/** MyCustomHandler [5/8] */

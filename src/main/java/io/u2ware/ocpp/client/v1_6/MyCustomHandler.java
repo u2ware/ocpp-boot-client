@@ -45,7 +45,7 @@ public class MyCustomHandler implements
         logger.info(String.format("\n\n\t MyCustomHandler[3/8] receivedHeartbeatResponse(%s)\n", id));
         ChargePointCommand command = 
             ChargePointCommand.Core.StartTransaction.buildWith("MyCustomHandler");
-        operations.send(command); // 4.            
+        operations.send(id, command); // 4.            
     }
 
     @Override/** MyCustomHandler [5/8] */
