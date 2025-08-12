@@ -14,7 +14,7 @@ import io.u2ware.ocpp.v1_6.model.DataTransferRequest;
 import io.u2ware.ocpp.v1_6.model.DataTransferResponse;
 
 @Component("DataTransfer_v1_6") // 1.
-public class DataTransfer implements ChargePointHandler { // 2.
+public class MyDataTransfer implements ChargePointHandler { // 2.
 
     protected Log logger = LogFactory.getLog(getClass());
 

@@ -31,11 +31,14 @@ class ApplicationTests {
 		logger.info("(v2.1)ChargingStation               : "+client);
 		logger.info("(v2.1)ChargingStationCommandTemplate: "+clientTemplate);
 	
-		/////////////////////////////////////
-		// OCPP Client Test  without I/O
-		/////////////////////////////////////
-		CSMSCommandTemplate mockServerTemplate = new CSMSCommandTemplate();
-		MockWebSocketHandlerInvoker.of(ac).connect(clientTemplate, mockServerTemplate); //-> 2
+        /////////////////////////////////////
+        // Test without I/O
+        /////////////////////////////////////
+		CSMSCommandTemplate mockServerTemplate 
+			= new CSMSCommandTemplate("mockServerTemplate");
+		
+		MockWebSocketHandlerInvoker.of(ac)
+			.connect(clientTemplate, mockServerTemplate); //-> 2
 		Thread.sleep(1000);	
 
 

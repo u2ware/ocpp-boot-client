@@ -34,7 +34,7 @@ class ApplicationTests {
 		/////////////////////////////////////
 		// OCPP Client Test  without I/O
 		/////////////////////////////////////
-		CSMSCommandTemplate mockServerTemplate = new CSMSCommandTemplate();
+		CSMSCommandTemplate mockServerTemplate = new CSMSCommandTemplate("mockServerTemplate");
 		MockWebSocketHandlerInvoker.of(ac).connect(clientTemplate, mockServerTemplate);
 		Thread.sleep(1000);	
 

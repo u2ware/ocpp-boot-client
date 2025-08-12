@@ -40,6 +40,6 @@ public class OCPPHandler {
 
     @EventListener
     public void handle(OCPPSessionErrorEvent e) {
-        logger.info(e.getPayload(), e.getException());
+        logger.info("ERROR", e.getPayload());
     }
 }
