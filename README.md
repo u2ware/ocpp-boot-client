@@ -11,7 +11,7 @@ If you want to customize a businiss logic, implement the corresponding client ha
 # Usage 
 
 ```bash
-./mvnw springboot:run
+./mvnw spring-boot:run
 ```
 
 

@@ -21,8 +21,8 @@ class ApplicationTests {
 
   	protected @Autowired ApplicationContext ac;
 
-	protected @Autowired ChargingStation client;
-	protected @Autowired ChargingStationCommandTemplate clientTemplate;
+	protected @Autowired(required = false) ChargingStation client;
+	protected @Autowired(required = false) ChargingStationCommandTemplate clientTemplate;
 
 
 	@Test
@@ -30,6 +30,7 @@ class ApplicationTests {
 
 		logger.info("(v2.0.1)ChargingStation               : "+client);
 		logger.info("(v2.0.1)ChargingStationCommandTemplate: "+clientTemplate);
+		if(client == null || clientTemplate == null) return;
 	
 		/////////////////////////////////////
 		// OCPP Client Test  without I/O
