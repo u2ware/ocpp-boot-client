@@ -9,12 +9,12 @@ import org.springframework.util.ObjectUtils;
 
 import io.u2ware.ocpp.v2_1.exception.ErrorCode;
 import io.u2ware.ocpp.v2_1.exception.ErrorCodes; //-> 3.
-import io.u2ware.ocpp.v2_1.handlers.DataTransfer.ChargingStationHandler; //-> 2.
+import io.u2ware.ocpp.v2_1.handlers.DataTransfer.ChargingStationHandler; //-> 1.
 import io.u2ware.ocpp.v2_1.model.DataTransferRequest;
 import io.u2ware.ocpp.v2_1.model.DataTransferResponse;
 
-@Component("DataTransfer_v2_1") //-> 1.
-public class MyDataTransfer implements ChargingStationHandler { //-> 2.
+@Component("DataTransfer_v2_1") //-> 2.
+public class MyDataTransfer implements ChargingStationHandler { //-> 1.
 
     protected Log logger = LogFactory.getLog(getClass());
 

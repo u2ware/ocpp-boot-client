@@ -20,32 +20,29 @@ If you want to customize a businiss logic, implement the corresponding client ha
 > http://localhost:8082
 
 
-# Customize    
+# Customize Handler    
 
 ```java
+import io.u2ware.ocpp.v2_1.handlers.DataTransfer.ChargingStationHandler; //-> 1.
 import io.u2ware.ocpp.v2_1.exception.ErrorCodes; //-> 3.
-import io.u2ware.ocpp.v2_1.handlers.DataTransfer.ChargingStationHandler; //-> 2.
 
-@Component //-> 1.
-public class MyDataTransfer implements ChargingStationHandler { //-> 2.
+@Component //-> 2.
+public class MyDataTransfer implements ChargingStationHandler { //-> 1.
 
     @Override/** DataTransfer [1/4] */
     public DataTransferRequest sendDataTransferRequest(
         String id, Map<String, Object> req) {
-
         return DataTransferRequest.builder().build();
     }
 
     @Override/** DataTransfer [3/4] */
     public void receivedDataTransferResponse(
         String id, DataTransferResponse res, ErrorCode err) {
-
     }
 
     @Override/** DataTransfer [2/4] */
     public DataTransferResponse receivedDataTransferRequest(
         String id, DataTransferRequest req) {
-
         if(ObjectUtils.isEmpty(req)) { // your logic...
             throw ErrorCodes.GenericError.exception("your error message"); //-> 3.
         }
@@ -55,76 +52,21 @@ public class MyDataTransfer implements ChargingStationHandler { //-> 2.
     @Override/** DataTransfer [4/4] */
     public void sendDataTransferResponse(
         String id, DataTransferResponse res, ErrorCode err) {
-
     }
 }
 ```
-
-```java
-import io.u2ware.ocpp.v2_1.handlers.Heartbeat; //-> 2.
-import io.u2ware.ocpp.v2_1.handlers.TransactionEvent; //-> 2.
-import io.u2ware.ocpp.v2_1.messaging.ChargingStationCommandOperations; //-> 4.
-
-@Component //-> 1.
-public class MyCustomHandler implements      
-    Heartbeat.ChargingStationHandler, //-> 2.
-    TransactionEvent.ChargingStationHandler {  //-> 2.
-
-    protected @Autowired ChargingStationCommandOperations operations; //-> 4.
-
-    @Override
-    public String usecase() {
-        return "MyCustomHandler";
-    }
-
-    @Override/** MyCustomHandler [1/8]  */
-    public HeartbeatRequest sendHeartbeatRequest(
-        String id, Map<String, Object> req) {
-
-        return HeartbeatRequest.builder().build();
-    }
-
-    @Override/** MyCustomHandler [3/8] */
-    public void receivedHeartbeatResponse(
-        String id, HeartbeatResponse res, ErrorCode err) {
-
-        ChargingStationCommand command = 
-            ChargingStationCommand.ALL.TransactionEvent.buildWith("MyCustomHandler");
-            
-        operations.send(id, command); //-> 4.            
-    }
-
-    @Override/** MyCustomHandler [5/8] */
-    public TransactionEventRequest sendTransactionEventRequest(
-        String id, Map<String, Object> req) {
-
-        return TransactionEventRequest.builder().build();
-    }
-
-    @Override/** MyCustomHandler [7/8] */
-    public void receivedTransactionEventResponse(
-        String id, TransactionEventResponse res, ErrorCode err) {
-
-    }
-}
-```
-
-1. Declare @Component so that 'ocppInitializer' scans the beans.
-2. Implement a Client Handler according to OCPP messages. 
+1. Implement a Client Handler according to OCPP messages. 
+2. Declare @Component so that 'ocppInitializer' scans the beans.
 3. <i>OCPP CALL ERROR</i> messages can be sent by throwing an error code. 
-4. You can send other <i>OCPP CALL</i> messages using 'ocppTemplate'.
-
 
 # Test without I/O
 
 ```java
-import io.u2ware.ocpp.client.MockWebSocketHandlerInvoker; //-> 2.
 import io.u2ware.ocpp.v2_1.messaging.CSMSCommandTemplate; //-> 1.
-import io.u2ware.ocpp.v2_1.messaging.ChargingStationCommandTemplate; 
-
+import io.u2ware.ocpp.client.MockWebSocketHandlerInvoker; //-> 2.
 
 @SpringBootTest
-class ApplicationTests {
+class MyDataTransferHandlerTests {
 
     protected @Autowired ApplicationContext ac;
 
@@ -134,7 +76,7 @@ class ApplicationTests {
     void context1Loads() throws Exception {
 
         /////////////////////////////////////
-        // Test without I/O
+        // Mock Object
         /////////////////////////////////////
         CSMSCommandTemplate mockServerTemplate 
             = new CSMSCommandTemplate("mockServerTemplate"); //-> 1.
@@ -145,11 +87,11 @@ class ApplicationTests {
         Thread.sleep(1000);	
 
         /////////////////////////////////////
-        // 
+        // Test without I/O
         /////////////////////////////////////
-        CSMSCommand command 
-            = ChargingStationCommand.ALL.Heartbeat.buildWith("MyCustomHandler");
-        clientTemplate.send(command);
+        ChargingStationCommand command 
+            = ChargingStationCommand.ALL.DataTransfer.build();
+        clientTemplate.send(command); //-> 3
         
         Thread.sleep(1000);
     }
@@ -158,7 +100,66 @@ class ApplicationTests {
 ```
 1. Make mock server object.
 2. Connecting mock object with your client bean. 
+3. send client command.
 
+
+
+# Customize Usecase    
+```java
+@Component
+public class SecurityA02ClientHandler implements 
+    TriggerMessage.ChargingStationHandler,
+    SignCertificate.ChargingStationHandler, 
+    CertificateSigned.ChargingStationHandler 
+    {
+
+    protected @Autowired ChargingStationCommandOperations ocppTemplate; //
+
+    @Override
+    public String usecase() {
+        return "A02"; //
+    }
+
+    @Override/** TriggerMessage [2/4]  */
+    public TriggerMessageResponse receivedTriggerMessageRequest(
+        String id, TriggerMessageRequest req) {
+        return TriggerMessageResponse.builder().build();
+    }
+
+    @Override/** TriggerMessage [4/4]  */
+    public void sendTriggerMessageResponse(
+        String id, TriggerMessageResponse res, ErrorCode err) {
+        ///////////////////////////////////////////////////////////////
+        // You can send other OCPP CALL messages using 'ocppTemplate'.
+        ///////////////////////////////////////////////////////////////
+        ChargingStationCommand command = 
+            ChargingStationCommand.ALL.SignCertificate.buildWith("A02");
+        ocppTemplate.send(id, command); //
+    }
+
+    @Override/** SignCertificate [1/4]  */
+    public SignCertificateRequest sendSignCertificateRequest(
+        String id, Map<String, Object> req) {
+        return SignCertificateRequest.builder().build();
+    }
+
+    @Override/** SignCertificate [3/4]  */
+    public void receivedSignCertificateResponse(
+        String id, SignCertificateResponse res, ErrorCode err) {
+    }
+
+    @Override/** CertificateSigned [2/4]  */
+    public CertificateSignedResponse receivedCertificateSignedRequest(
+        String id, CertificateSignedRequest req) {
+        return CertificateSignedResponse.builder().build();
+    }   
+
+    @Override/** CertificateSigned [4/4]  */
+    public void sendCertificateSignedResponse(
+        String id, CertificateSignedResponse res, ErrorCode err) {
+    }
+}
+```
 
 # @EnableOcppClient 
 

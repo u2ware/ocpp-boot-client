@@ -6,8 +6,7 @@ import io.u2ware.ocpp.config.EnableOcppClient;
 import io.u2ware.ocpp.OCPPVersion;
 
 @Configuration
-@EnableOcppClient(version = OCPPVersion.V2_1, uri="ws://localhost/ocpp")
-// @EnableOcppClient(version = OCPPVersion.V2_1, uri="ws://localhost:8081/ocpp")
+@EnableOcppClient(version = OCPPVersion.V2_1, uri="ws://localhost:8081/ocpp")
 // @EnableOcppClient(version = OCPPVersion.V2_0_1, uri="ws://localhost:8081/ocpp")
 // @EnableOcppClient(version = OCPPVersion.V1_6, uri="ws://localhost:8081/ocpp")
 public class OCPPConfig {

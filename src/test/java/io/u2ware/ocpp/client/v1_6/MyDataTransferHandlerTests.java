@@ -15,7 +15,7 @@ import io.u2ware.ocpp.v1_6.messaging.ChargePointCommandTemplate;
 
 
 @SpringBootTest
-class ApplicationTests {
+class MyDataTransferHandlerTests {
 
 	protected Log logger = LogFactory.getLog(getClass());
 
@@ -43,7 +43,7 @@ class ApplicationTests {
 		/////////////////////////////////////
 		// 
 		/////////////////////////////////////
-		clientTemplate.send(ChargePointCommand.Core.Heartbeat.buildWith("MyCustomHandler"));
+		clientTemplate.send(ChargePointCommand.Core.DataTransfer.build());
 		Thread.sleep(1000);		
 	}
 }
