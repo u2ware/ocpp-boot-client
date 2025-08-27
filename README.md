@@ -1,7 +1,7 @@
 
 
 # ocpp-boot-client
-OCPP client implementation with spring-boot. 
+OCPP client sample implementation with spring-boot. 
 
 All messages for all versions of OCPP are written in Java. 
 
