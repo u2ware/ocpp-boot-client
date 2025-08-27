@@ -218,7 +218,7 @@ public class Application {
 
 |participant|object|
 |------|:---|
-|Command |[CSMSCommandOperations]()  or [ChargingStationCommandOperations]() |
+|Commander |[CSMSCommandOperations]()  or [ChargingStationCommandOperations]() |
 |Offer | [CSMSHandler]() or [ChargingStationHandler]() |
 |Sender |[CSMS]() or [ChargingStation]() |
 |Receiver |[CSMS]() or [ChargingStation]() |
@@ -229,7 +229,7 @@ public class Application {
 
 |participant|object|
 |------|:---|
-|Command |[CSMSCommandOperations]()  or [ChargingStationCommandOperations]() |
+|Commander |[CSMSCommandOperations]()  or [ChargingStationCommandOperations]() |
 |Offer | [CSMSHandler]() or [ChargingStationHandler]() |
 |Sender |[CSMS]() or [ChargingStation]() |
 |Receiver |[CSMS]() or [ChargingStation]() |
@@ -240,7 +240,7 @@ public class Application {
 
 |participant|object|
 |------|:---|
-|Command |[CentralSystemCommandOperations]()  or [ChargePointCommandOperations]() |
+|Commander |[CentralSystemCommandOperations]()  or [ChargePointCommandOperations]() |
 |Offer | [CentralSystemHandler]() or [ChargePointHandler]() |
 |Sender |[CentralSystem]() or [ChargePoint]() |
 |Receiver |[CentralSystem]() or [ChargePoint]() |
