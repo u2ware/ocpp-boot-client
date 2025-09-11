@@ -8,10 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
 import io.u2ware.ocpp.client.MockWebSocketHandlerInvoker;
-import io.u2ware.ocpp.v1_6.messaging.CentralSystemCommandTemplate;
-import io.u2ware.ocpp.v1_6.messaging.ChargePoint;
+import io.u2ware.ocpp.v1_6.messaging.CentralSystemSession;
 import io.u2ware.ocpp.v1_6.messaging.ChargePointCommand;
-import io.u2ware.ocpp.v1_6.messaging.ChargePointCommandTemplate;
+import io.u2ware.ocpp.v1_6.messaging.ChargePointSession;
 
 
 @SpringBootTest
@@ -21,29 +20,27 @@ class MyDataTransferHandlerTests {
 
   	protected @Autowired ApplicationContext ac;
 
-	protected @Autowired(required = false) ChargePoint client;
-	protected @Autowired(required = false) ChargePointCommandTemplate clientTemplate;
+	protected @Autowired(required = false) ChargePointSession ocppSession;
 
 
 	@Test
 	void context1Loads() throws Exception {
 
-		logger.info("(v1.6)ChargePoint               : "+client);
-		logger.info("(v1.6)ChargePointCommandTemplate: "+clientTemplate);
-		if(client == null || clientTemplate == null) return;
+		logger.info("(v1.6)ChargePointSession: "+ocppSession);
+		if(ocppSession == null) return;
 
 		/////////////////////////////////////
 		// OCPP Client Test without I/O
 		/////////////////////////////////////
-		CentralSystemCommandTemplate mockServerTemplate = new CentralSystemCommandTemplate("mockServerTemplate");
-		MockWebSocketHandlerInvoker.of(ac).connect(clientTemplate, mockServerTemplate);
+		CentralSystemSession mockSession = new CentralSystemSession("mockSession");
+		MockWebSocketHandlerInvoker.of(ac).connect(ocppSession, mockSession);
 		Thread.sleep(1000);	
 
 
 		/////////////////////////////////////
 		// 
 		/////////////////////////////////////
-		clientTemplate.send(ChargePointCommand.Core.DataTransfer.build());
+		ocppSession.offer(ChargePointCommand.Core.DataTransfer.build());
 		Thread.sleep(1000);		
 	}
 }

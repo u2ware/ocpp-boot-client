@@ -5,12 +5,12 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import io.u2ware.ocpp.v2_1.messaging.CSMSSession;
 import io.u2ware.ocpp.v2_1.exception.ErrorCode;
 import io.u2ware.ocpp.v2_1.handlers.CertificateSigned;
 import io.u2ware.ocpp.v2_1.handlers.SignCertificate;
 import io.u2ware.ocpp.v2_1.handlers.TriggerMessage;
 import io.u2ware.ocpp.v2_1.messaging.CSMSCommand;
-import io.u2ware.ocpp.v2_1.messaging.CSMSCommandOperations;
 import io.u2ware.ocpp.v2_1.model.CertificateSignedRequest;
 import io.u2ware.ocpp.v2_1.model.CertificateSignedResponse;
 import io.u2ware.ocpp.v2_1.model.SignCertificateRequest;
@@ -26,10 +26,10 @@ public class SecurityA02ServerHandler  implements
 
     protected Log logger = LogFactory.getLog(getClass());
 
-    protected CSMSCommandOperations operations; //-> 4.
+    protected CSMSSession ocppSession;
 
-    public SecurityA02ServerHandler(CSMSCommandOperations operations){
-        this.operations = operations;
+    public SecurityA02ServerHandler(CSMSSession ocppSession){
+        this.ocppSession = ocppSession;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SecurityA02ServerHandler  implements
 
         CSMSCommand command = 
             CSMSCommand.ALL.CertificateSigned.buildWith("A03");
-        operations.send(id, command); //-> 4.
+        ocppSession.offer(command, id); //-> 4.
     }
 
     @Override

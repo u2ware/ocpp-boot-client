@@ -8,10 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
 import io.u2ware.ocpp.client.MockWebSocketHandlerInvoker;
-import io.u2ware.ocpp.v2_0_1.messaging.CSMSCommandTemplate;
-import io.u2ware.ocpp.v2_0_1.messaging.ChargingStation;
 import io.u2ware.ocpp.v2_0_1.messaging.ChargingStationCommand;
-import io.u2ware.ocpp.v2_0_1.messaging.ChargingStationCommandTemplate;
+import io.u2ware.ocpp.v2_0_1.messaging.CSMSSession;
+import io.u2ware.ocpp.v2_0_1.messaging.ChargingStationSession;
 
 
 @SpringBootTest
@@ -20,30 +19,27 @@ class MyDataTransferHandlerTests {
 	protected Log logger = LogFactory.getLog(getClass());
 
   	protected @Autowired ApplicationContext ac;
-
-	protected @Autowired(required = false) ChargingStation client;
-	protected @Autowired(required = false) ChargingStationCommandTemplate clientTemplate;
+	protected @Autowired(required = false) ChargingStationSession ocppSession;
 
 
 	@Test
 	void context1Loads() throws Exception {
 
-		logger.info("(v2.0.1)ChargingStation               : "+client);
-		logger.info("(v2.0.1)ChargingStationCommandTemplate: "+clientTemplate);
-		if(client == null || clientTemplate == null) return;
+		logger.info("(v2.0.1)ChargingStationSession: "+ocppSession);
+		if(ocppSession == null) return;
 	
 		/////////////////////////////////////
 		// OCPP Client Test  without I/O
 		/////////////////////////////////////
-		CSMSCommandTemplate mockServerTemplate = new CSMSCommandTemplate("mockServerTemplate");
-		MockWebSocketHandlerInvoker.of(ac).connect(clientTemplate, mockServerTemplate);
+		CSMSSession mockSession = new CSMSSession("mockSession");
+		MockWebSocketHandlerInvoker.of(ac).connect(ocppSession, mockSession);
 		Thread.sleep(1000);	
 
 
 		/////////////////////////////////////
 		// 
 		/////////////////////////////////////
-		clientTemplate.send(ChargingStationCommand.ALL.DataTransfer.build());
+		ocppSession.offer(ChargingStationCommand.ALL.DataTransfer.build());
 		Thread.sleep(1000);			
 
 	}

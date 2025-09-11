@@ -8,10 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
 import io.u2ware.ocpp.client.MockWebSocketHandlerInvoker; //-> 2
-import io.u2ware.ocpp.v2_1.messaging.CSMSCommandTemplate; //-> 1
-import io.u2ware.ocpp.v2_1.messaging.ChargingStation;
+import io.u2ware.ocpp.v2_1.messaging.CSMSSession;
 import io.u2ware.ocpp.v2_1.messaging.ChargingStationCommand;
-import io.u2ware.ocpp.v2_1.messaging.ChargingStationCommandTemplate; 
+import io.u2ware.ocpp.v2_1.messaging.ChargingStationSession; 
 
 
 @SpringBootTest
@@ -20,27 +19,24 @@ class MyDataTransferHandlerTests {
 	protected Log logger = LogFactory.getLog(getClass());
 
   	protected @Autowired ApplicationContext ac;
-
-	protected @Autowired(required = false) ChargingStation client;
-	protected @Autowired(required = false) ChargingStationCommandTemplate clientTemplate;
+	protected @Autowired(required = false) ChargingStationSession ocppSession;
 
 
 	@Test
 	void context1Loads() throws Exception {
 
-		logger.info("(v2.1)ChargingStation               : "+client);
-		logger.info("(v2.1)ChargingStationCommandTemplate: "+clientTemplate);
-		if(client == null || clientTemplate == null) return;
+		logger.info("(v2.1)ChargingStationSession: "+ocppSession);
+		if(ocppSession == null) return;
 
 
         /////////////////////////////////////
         // Mock Object
         /////////////////////////////////////
-		CSMSCommandTemplate mockServerTemplate 
-			= new CSMSCommandTemplate("mockServerTemplate"); //-> 1.
+		CSMSSession mockSession 
+			= new CSMSSession("mockSession"); //-> 1.
 		
 		MockWebSocketHandlerInvoker.of(ac)
-			.connect(clientTemplate, mockServerTemplate); //-> 2
+			.connect(ocppSession, mockSession); //-> 2
 		
 		Thread.sleep(1000);	
 
@@ -50,7 +46,8 @@ class MyDataTransferHandlerTests {
         /////////////////////////////////////
         ChargingStationCommand command 
             = ChargingStationCommand.ALL.DataTransfer.build();
-        clientTemplate.send(command); //-> 3
+        ocppSession.offer(command); //-> 3
 
+        Thread.sleep(1000);
 	}
 }

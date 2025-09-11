@@ -5,11 +5,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import io.u2ware.ocpp.OCPPSessionConnectEvent;
-import io.u2ware.ocpp.OCPPSessionDisconnectEvent;
-import io.u2ware.ocpp.OCPPSessionErrorEvent;
-import io.u2ware.ocpp.OCPPSessionReceivedEvent;
-import io.u2ware.ocpp.OCPPSessionSendEvent;
+import io.u2ware.ocpp.event.OCPPSessionConnectEvent;
+import io.u2ware.ocpp.event.OCPPSessionDisconnectEvent;
+import io.u2ware.ocpp.event.OCPPSessionErrorEvent;
+import io.u2ware.ocpp.event.OCPPSessionReceivedEvent;
+import io.u2ware.ocpp.event.OCPPSessionSendEvent;
 
 
 @Component

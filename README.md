@@ -186,27 +186,21 @@ public class Application {
 
 	|beanName|beanClass|Description|
 	|------|:---|---|
-	|ocppOperations | [ChargingStation]()| An object that can offer and answer OCPP version 2.1 message.|
-	|ocppTemplate | [ChargingStationCommandOperations]()| An object that can send a [ChargingStationCommand]().|
-	|ocppInitializer | [ChargingStationInitializer]()| Scan for a [ChargingStationHandler]() that register it in [ChargingStation]().|
+	|ocppTemplate | [ChargingStationSession]()| An object that can offer a [ChargingStationCommand]().|
 
 
     * v2.0.1
 
 	|beanName|beanClass|Description|
 	|------|:---|---|
-	|ocppOperations | [ChargingStation]()| An object that can offer and answer OCPP version 2.0.1 message.|
-	|ocppTemplate | [ChargingStationCommandOperations]()| An object that can send a [ChargingStationCommand]().|
-	|ocppInitializer | [ChargingStationInitializer]()| Scan for a [ChargingStationHandler]() that register it in [ChargingStation]().|
+	|ocppTemplate | [ChargingStationSession]()| An object that can offer a [ChargingStationCommand]().|
 
 
     * v1.6
 
 	|beanName|beanClass|Description|
 	|------|:---|---|
-	|ocppOperations | [ChargePoint]()| An object that can offer and answer OCPP version 1.6 message.|
-	|ocppTemplate | [ChargePointCommandOperations]() | An object that can send a [ChargePointCommand]().|
-	|ocppInitializer | [ChargePointInitializer]()| Scan for a [ChargePointHandler]() that register it in [ChargePoint]().|
+	|ocppTemplate | [ChargePointSession]() | An object that can offer a [ChargePointCommand]().|
 
 
 
@@ -218,7 +212,7 @@ public class Application {
 
 |participant|object|
 |------|:---|
-|Commander |[CSMSCommandOperations]()  or [ChargingStationCommandOperations]() |
+|Commander |[CSMSSession]()  or [ChargingStationSession]() |
 |Offer | [CSMSHandler]() or [ChargingStationHandler]() |
 |Sender |[CSMS]() or [ChargingStation]() |
 |Receiver |[CSMS]() or [ChargingStation]() |
@@ -229,7 +223,7 @@ public class Application {
 
 |participant|object|
 |------|:---|
-|Commander |[CSMSCommandOperations]()  or [ChargingStationCommandOperations]() |
+|Commander |[CSMSSession]()  or [ChargingStationSession]() |
 |Offer | [CSMSHandler]() or [ChargingStationHandler]() |
 |Sender |[CSMS]() or [ChargingStation]() |
 |Receiver |[CSMS]() or [ChargingStation]() |
@@ -240,15 +234,11 @@ public class Application {
 
 |participant|object|
 |------|:---|
-|Commander |[CentralSystemCommandOperations]()  or [ChargePointCommandOperations]() |
+|Commander |[CentralSystemSession]()  or [ChargePointSession]() |
 |Offer | [CentralSystemHandler]() or [ChargePointHandler]() |
 |Sender |[CentralSystem]() or [ChargePoint]() |
 |Receiver |[CentralSystem]() or [ChargePoint]() |
 |Answer | [CentralSystemHandler]() or [ChargePointHandler]() |
-
-
-
-
 
 
 
