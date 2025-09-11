@@ -1,5 +1,3 @@
-
-
 # ocpp-boot-client
 OCPP client sample implementation with spring-boot. 
 
@@ -23,8 +21,10 @@ If you want to customize a businiss logic, implement the corresponding client ha
 # Customize Handler    
 
 ```java
-import io.u2ware.ocpp.v2_1.handlers.DataTransfer.ChargingStationHandler; //-> 1.
-import io.u2ware.ocpp.v2_1.exception.ErrorCodes; //-> 3.
+import io.u2ware.ocpp.v2_1.exception.*;
+import io.u2ware.ocpp.v2_1.handlers.*;
+import io.u2ware.ocpp.v2_1.messaging.*;
+import io.u2ware.ocpp.v2_1.model.*;
 
 @Component //-> 2.
 public class MyDataTransfer implements ChargingStationHandler { //-> 1.
@@ -56,21 +56,22 @@ public class MyDataTransfer implements ChargingStationHandler { //-> 1.
 }
 ```
 1. Implement a Client Handler according to OCPP messages. 
-2. Declare @Component so that 'ocppInitializer' scans the beans.
+2. Declare @Component so that scans the beans.
 3. <i>OCPP CALL ERROR</i> messages can be sent by throwing an error code. 
 
 # Test without I/O
 
 ```java
-import io.u2ware.ocpp.v2_1.messaging.CSMSCommandTemplate; //-> 1.
-import io.u2ware.ocpp.client.MockWebSocketHandlerInvoker; //-> 2.
+import io.u2ware.ocpp.v2_1.exception.*;
+import io.u2ware.ocpp.v2_1.handlers.*;
+import io.u2ware.ocpp.v2_1.messaging.*;
+import io.u2ware.ocpp.v2_1.model.*;
 
 @SpringBootTest
 class MyDataTransferHandlerTests {
 
     protected @Autowired ApplicationContext ac;
-
-    protected @Autowired ChargingStationCommandTemplate clientTemplate;
+    protected @Autowired ChargingStationSession ocppSession;
 
     @Test
     void context1Loads() throws Exception {
@@ -78,20 +79,20 @@ class MyDataTransferHandlerTests {
         /////////////////////////////////////
         // Mock Object
         /////////////////////////////////////
-        CSMSCommandTemplate mockServerTemplate 
-            = new CSMSCommandTemplate("mockServerTemplate"); //-> 1.
-
-        MockWebSocketHandlerInvoker.of(ac)
-            .connect(clientTemplate, mockServerTemplate); //-> 2.
-
-        Thread.sleep(1000);	
+		CSMSSession mockSession 
+			= new CSMSSession("mockSession"); //-> 1.
+		
+		MockWebSocketHandlerInvoker.of(ac)
+			.connect(ocppSession, mockSession); //-> 2
+		
+		Thread.sleep(1000);	
 
         /////////////////////////////////////
         // Test without I/O
         /////////////////////////////////////
         ChargingStationCommand command 
             = ChargingStationCommand.ALL.DataTransfer.build();
-        clientTemplate.send(command); //-> 3
+        clientTemplate.offer(command); //-> 3
         
         Thread.sleep(1000);
     }
@@ -106,6 +107,11 @@ class MyDataTransferHandlerTests {
 
 # Customize Usecase    
 ```java
+import io.u2ware.ocpp.v2_1.exception.*;
+import io.u2ware.ocpp.v2_1.handlers.*;
+import io.u2ware.ocpp.v2_1.messaging.*;
+import io.u2ware.ocpp.v2_1.model.*;
+
 @Component
 public class SecurityA02ClientHandler implements 
     TriggerMessage.ChargingStationHandler,
@@ -113,7 +119,7 @@ public class SecurityA02ClientHandler implements
     CertificateSigned.ChargingStationHandler 
     {
 
-    protected @Autowired ChargingStationCommandOperations ocppTemplate; //
+    protected @Autowired ChargingStationSession ocppSession; //
 
     @Override
     public String usecase() {
@@ -134,7 +140,7 @@ public class SecurityA02ClientHandler implements
         ///////////////////////////////////////////////////////////////
         ChargingStationCommand command = 
             ChargingStationCommand.ALL.SignCertificate.buildWith("A02");
-        ocppTemplate.send(id, command); //
+        ocppSession.offer(command, id); //
     }
 
     @Override/** SignCertificate [1/4]  */
@@ -179,29 +185,13 @@ public class Application {
 
 2. versions. V2_1, V2_0_1, V1_6
 
-3. [@EnableOcppClient]() automatically registers the following beans:
+3. automatically registers the 'ocppSession' beans according to version:
 
-
-    * v2.1
-
-	|beanName|beanClass|Description|
-	|------|:---|---|
-	|ocppTemplate | [ChargingStationSession]()| An object that can offer a [ChargingStationCommand]().|
-
-
-    * v2.0.1
-
-	|beanName|beanClass|Description|
-	|------|:---|---|
-	|ocppTemplate | [ChargingStationSession]()| An object that can offer a [ChargingStationCommand]().|
-
-
-    * v1.6
-
-	|beanName|beanClass|Description|
-	|------|:---|---|
-	|ocppTemplate | [ChargePointSession]() | An object that can offer a [ChargePointCommand]().|
-
+|version|beanClass|Description|
+|------|:---|---|
+|v2.1 | [ChargingStationSession]()| An object that can offer a [ChargingStationCommand]().|
+|v2.0.1 | [ChargingStationSession]()| An object that can offer a [ChargingStationCommand]().|
+|v1.6 | [ChargePointSession]() | An object that can offer a [ChargePointCommand]().|
 
 
 
