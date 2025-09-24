@@ -71,7 +71,7 @@ import io.u2ware.ocpp.v2_1.model.*;
 class MyDataTransferHandlerTests {
 
     protected @Autowired ApplicationContext ac;
-    protected @Autowired ChargingStationSession ocppSession;
+    protected @Autowired ChargingStationTransport ocppTransport;
 
     @Test
     void context1Loads() throws Exception {
@@ -79,11 +79,11 @@ class MyDataTransferHandlerTests {
         /////////////////////////////////////
         // Mock Object
         /////////////////////////////////////
-		CSMSSession mockSession 
-			= new CSMSSession("mockSession"); //-> 1.
+		CSMSTransport mockTransport 
+			= new CSMSTransport("mockTransport"); //-> 1.
 		
 		MockWebSocketHandlerInvoker.of(ac)
-			.connect(ocppSession, mockSession); //-> 2
+			.connect(ocppTransport, mockTransport); //-> 2
 		
 		Thread.sleep(1000);	
 
@@ -92,7 +92,7 @@ class MyDataTransferHandlerTests {
         /////////////////////////////////////
         ChargingStationCommand command 
             = ChargingStationCommand.ALL.DataTransfer.build();
-        clientTemplate.offer(command); //-> 3
+        ocppTransport.offer(command); //-> 3
         
         Thread.sleep(1000);
     }
@@ -119,7 +119,7 @@ public class SecurityA02ClientHandler implements
     CertificateSigned.ChargingStationHandler 
     {
 
-    protected @Autowired ChargingStationSession ocppSession; //
+    protected @Autowired ChargingStationTransport ocppTransport; //
 
     @Override
     public String usecase() {
@@ -140,7 +140,7 @@ public class SecurityA02ClientHandler implements
         ///////////////////////////////////////////////////////////////
         ChargingStationCommand command = 
             ChargingStationCommand.ALL.SignCertificate.buildWith("A02");
-        ocppSession.offer(command, id); //
+        ocppTransport.offer(command); //
     }
 
     @Override/** SignCertificate [1/4]  */
@@ -189,9 +189,10 @@ public class Application {
 
 |version|beanClass|Description|
 |------|:---|---|
-|v2.1 | [ChargingStationSession]()| An object that can offer a [ChargingStationCommand]().|
-|v2.0.1 | [ChargingStationSession]()| An object that can offer a [ChargingStationCommand]().|
-|v1.6 | [ChargePointSession]() | An object that can offer a [ChargePointCommand]().|
+|v2.1 | [ChargingStationTransport]()| An object that can offer a [ChargingStationCommand]().|
+|v2.0.1 | [ChargingStationTransport]()| An object that can offer a [ChargingStationCommand]().|
+|v1.6 | [ChargePointTransport]() | An object that can offer a [ChargePointCommand]().|
+
 
 
 
@@ -202,33 +203,23 @@ public class Application {
 
 |participant|object|
 |------|:---|
-|Commander |[CSMSSession]()  or [ChargingStationSession]() |
-|Offer | [CSMSHandler]() or [ChargingStationHandler]() |
-|Sender |[CSMS]() or [ChargingStation]() |
-|Receiver |[CSMS]() or [ChargingStation]() |
-|Answer | [CSMSHandler]() or [ChargingStationHandler]() |
+|Offer / Answer| [CSMSHandler]() or [ChargingStationHandler]() |
+|Sender / Receiver |[CSMSSession]() or [ChargingStationSession]() |
+|Transport |[CSMSTransport]()  or [ChargingStationTransport]() |
 
 
 * v2.0.1
 
 |participant|object|
 |------|:---|
-|Commander |[CSMSSession]()  or [ChargingStationSession]() |
-|Offer | [CSMSHandler]() or [ChargingStationHandler]() |
-|Sender |[CSMS]() or [ChargingStation]() |
-|Receiver |[CSMS]() or [ChargingStation]() |
-|Answer | [CSMSHandler]() or [ChargingStationHandler]() |
-
+|Offer / Answer| [CSMSHandler]() or [ChargingStationHandler]() |
+|Sender / Receiver |[CSMSSession]() or [ChargingStationSession]() |
+|Transport |[CSMSTransport]()  or [ChargingStationTransport]() |
 
 * v1.6
 
 |participant|object|
 |------|:---|
-|Commander |[CentralSystemSession]()  or [ChargePointSession]() |
-|Offer | [CentralSystemHandler]() or [ChargePointHandler]() |
-|Sender |[CentralSystem]() or [ChargePoint]() |
-|Receiver |[CentralSystem]() or [ChargePoint]() |
-|Answer | [CentralSystemHandler]() or [ChargePointHandler]() |
-
-
-
+|Offer / Answer| [CentralSystemHandler]() or [ChargePointHandler]() |
+|Sender / Receiver |[CentralSystemSession]() or [ChargePointSession]() |
+|Transport |[CentralSystemTransport]()  or [ChargePointTransport]() |

@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import io.u2ware.ocpp.v2_1.messaging.CSMSSession;
+import io.u2ware.ocpp.v2_1.messaging.CSMSTransport;
 import io.u2ware.ocpp.v2_1.exception.ErrorCode;
 import io.u2ware.ocpp.v2_1.handlers.CertificateSigned;
 import io.u2ware.ocpp.v2_1.handlers.SignCertificate;
@@ -26,10 +26,10 @@ public class SecurityA02ServerHandler  implements
 
     protected Log logger = LogFactory.getLog(getClass());
 
-    protected CSMSSession ocppSession;
+    protected CSMSTransport ocppTransport;
 
-    public SecurityA02ServerHandler(CSMSSession ocppSession){
-        this.ocppSession = ocppSession;
+    public SecurityA02ServerHandler(CSMSTransport ocppTransport){
+        this.ocppTransport = ocppTransport;
     }
 
     @Override
@@ -61,8 +61,8 @@ public class SecurityA02ServerHandler  implements
         logger.info(String.format("\n\n\t SignCertificate[4/4] sendSignCertificateResponse(%s)\n", id));
 
         CSMSCommand command = 
-            CSMSCommand.ALL.CertificateSigned.buildWith("A03");
-        ocppSession.offer(command, id); //-> 4.
+            CSMSCommand.ALL.CertificateSigned.buildWith(usecase());
+        ocppTransport.offer(command, id); //-> 4.
     }
 
     @Override

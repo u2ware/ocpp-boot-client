@@ -9,8 +9,8 @@ import org.springframework.context.ApplicationContext;
 
 import io.u2ware.ocpp.client.MockWebSocketHandlerInvoker;
 import io.u2ware.ocpp.v2_0_1.messaging.ChargingStationCommand;
-import io.u2ware.ocpp.v2_0_1.messaging.CSMSSession;
-import io.u2ware.ocpp.v2_0_1.messaging.ChargingStationSession;
+import io.u2ware.ocpp.v2_0_1.messaging.CSMSTransport;
+import io.u2ware.ocpp.v2_0_1.messaging.ChargingStationTransport;
 
 
 @SpringBootTest
@@ -19,27 +19,27 @@ class MyDataTransferHandlerTests {
 	protected Log logger = LogFactory.getLog(getClass());
 
   	protected @Autowired ApplicationContext ac;
-	protected @Autowired(required = false) ChargingStationSession ocppSession;
+	protected @Autowired(required = false) ChargingStationTransport ocppTransport;
 
 
 	@Test
 	void context1Loads() throws Exception {
 
-		logger.info("(v2.0.1)ChargingStationSession: "+ocppSession);
-		if(ocppSession == null) return;
+		logger.info("(v2.0.1)ChargingStationTransport: "+ocppTransport);
+		if(ocppTransport == null) return;
 	
 		/////////////////////////////////////
 		// OCPP Client Test  without I/O
 		/////////////////////////////////////
-		CSMSSession mockSession = new CSMSSession("mockSession");
-		MockWebSocketHandlerInvoker.of(ac).connect(ocppSession, mockSession);
+		CSMSTransport mockTransport = new CSMSTransport("mockTransport");
+		MockWebSocketHandlerInvoker.of(ac).connect(ocppTransport, mockTransport);
 		Thread.sleep(1000);	
 
 
 		/////////////////////////////////////
 		// 
 		/////////////////////////////////////
-		ocppSession.offer(ChargingStationCommand.ALL.DataTransfer.build());
+		ocppTransport.offer(ChargingStationCommand.ALL.DataTransfer.build());
 		Thread.sleep(1000);			
 
 	}

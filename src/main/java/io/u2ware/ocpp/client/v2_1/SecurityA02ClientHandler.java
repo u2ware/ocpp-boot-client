@@ -12,7 +12,7 @@ import io.u2ware.ocpp.v2_1.handlers.CertificateSigned;
 import io.u2ware.ocpp.v2_1.handlers.SignCertificate;
 import io.u2ware.ocpp.v2_1.handlers.TriggerMessage;
 import io.u2ware.ocpp.v2_1.messaging.ChargingStationCommand;
-import io.u2ware.ocpp.v2_1.messaging.ChargingStationSession;
+import io.u2ware.ocpp.v2_1.messaging.ChargingStationTransport;
 import io.u2ware.ocpp.v2_1.model.CertificateSignedRequest;
 import io.u2ware.ocpp.v2_1.model.CertificateSignedResponse;
 import io.u2ware.ocpp.v2_1.model.SignCertificateRequest;
@@ -29,7 +29,7 @@ public class SecurityA02ClientHandler  implements
 
     protected Log logger = LogFactory.getLog(getClass());
 
-    protected @Autowired(required = false) ChargingStationSession ocppSession; //
+    protected @Autowired(required = false) ChargingStationTransport ocppTransport; //
 
     @Override
     public String usecase() {
@@ -50,7 +50,7 @@ public class SecurityA02ClientHandler  implements
         ///////////////////////////////////////////////////////////////
         ChargingStationCommand command = 
             ChargingStationCommand.ALL.SignCertificate.buildWith("A02");
-        ocppSession.offer(command); // 
+        ocppTransport.offer(command); // 
     }
 
     @Override/** SignCertificate [1/4]  */
