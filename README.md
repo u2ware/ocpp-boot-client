@@ -185,7 +185,7 @@ public class Application {
 
 2. versions. V2_1, V2_0_1, V1_6
 
-3. automatically registers the 'ocppSession' beans according to version:
+3. automatically registers the 'ocppTransport' beans according to version:
 
 |version|beanClass|Description|
 |------|:---|---|
