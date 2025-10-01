@@ -1,3 +1,6 @@
+OCPP 관련 협업 문의 kslee@u2ware.com
+
+
 # ocpp-boot-client
 OCPP client sample implementation with spring-boot. 
 
