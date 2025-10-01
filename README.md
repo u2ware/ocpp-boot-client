@@ -13,11 +13,36 @@ If you want to customize a businiss logic, implement the corresponding client ha
 ```
 
 
-# Admin UX
+# Console UI
 
 > http://localhost:8082
 
 ![OCPP-BOOT](./lib/admin.png)
+
+
+
+# @EnableOcppClient 
+
+```java
+@SpringBootApplication
+@EnableOcppClient(                        //-> 3. 
+    version = OCPPVersion.V2_1,           //-> 2. 
+	uri = "ws://localhost:8081/ocpp"      //-> 1. 
+)
+public class Application {
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+}
+```
+1. URI. websocket URI of ocpp server 
+
+2. versions. V2_1, V2_0_1, V1_6
+
+3. automatically registers the 'ocppTransport' beans according to version: See [Core Concept](#core-concept)
+
+
+
 
 # Customize Handler    
 
@@ -167,32 +192,6 @@ public class SecurityA02ClientHandler implements
     }
 }
 ```
-
-# @EnableOcppClient 
-
-```java
-@SpringBootApplication
-@EnableOcppClient(                        //-> 3. 
-    version = OCPPVersion.V2_1,           //-> 2. 
-	uri = "ws://localhost:8081/your_ocpp" //-> 1. 
-)
-public class Application {
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
-}
-```
-1. URI. websocket URI of ocpp server 
-
-2. versions. V2_1, V2_0_1, V1_6
-
-3. automatically registers the 'ocppTransport' beans according to version:
-
-|version|beanClass|Description|
-|------|:---|---|
-|v2.1 | [ChargingStationTransport]()| An object that can offer a [ChargingStationCommand]().|
-|v2.0.1 | [ChargingStationTransport]()| An object that can offer a [ChargingStationCommand]().|
-|v1.6 | [ChargePointTransport]() | An object that can offer a [ChargePointCommand]().|
 
 
 
